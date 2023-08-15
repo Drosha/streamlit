@@ -2,19 +2,14 @@ import http.client, urllib.parse
 import streamlit as st
 import pandas as pd
 import folium
-from streamlit_folium import st_folium, folium_static
 
-m = folium.Map(location=[df.latitude.mean(), df.longitude.mean()], zoom_start=3, control_scale=True)
+from streamlit_folium import st_folium
 
-#Loop through each row in the dataframe
-for i,row in df.iterrows():
-    #Setup the content of the popup
-    iframe = folium.IFrame('Well Name:' + str(row["Well Name"]))
+# center on Liberty Bell, add marker
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
 
-    #Initialise the popup using the iframe
-    popup = folium.Popup(iframe, min_width=300, max_width=300)
-
-    #Add each row to the map
-    folium.Marker(location=[row['latitude'],row['longitude']], popup = popup, c=row['Well Name']).add_to(m)
-
-st_data = st_folium(m, width=700)
+# call to render Folium map in Streamlit
+st_data = st_folium(m, width=725)
