@@ -2,7 +2,7 @@ import http.client, urllib.parse
 import streamlit as st
 import pandas as pd
 
-import plotly.express as px
+import plotly as px
 
 fig = px.scatter_mapbox(df, lat="latitude", lon="longitude", zoom=3)
 
