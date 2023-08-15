@@ -1,11 +1,20 @@
 import http.client, urllib.parse
 import streamlit as st
 import pandas as pd
+import folium
+from streamlit_folium import st_folium, folium_static
 
-import plotly as px
+m = folium.Map(location=[df.latitude.mean(), df.longitude.mean()], zoom_start=3, control_scale=True)
 
-fig = px.scatter_mapbox(df, lat="latitude", lon="longitude", zoom=3)
+#Loop through each row in the dataframe
+for i,row in df.iterrows():
+    #Setup the content of the popup
+    iframe = folium.IFrame('Well Name:' + str(row["Well Name"]))
 
-fig.update_layout(mapbox_style="open-street-map")
-fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-st.plotly_chart(fig)
+    #Initialise the popup using the iframe
+    popup = folium.Popup(iframe, min_width=300, max_width=300)
+
+    #Add each row to the map
+    folium.Marker(location=[row['latitude'],row['longitude']], popup = popup, c=row['Well Name']).add_to(m)
+
+st_data = st_folium(m, width=700)
